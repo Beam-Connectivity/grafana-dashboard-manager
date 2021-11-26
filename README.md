@@ -66,3 +66,5 @@ N.B. if your Grafana is not at port 80/443 as indicated by the protocol prefix, 
 - Currently expects a hardcoded 'home.json' dashboard to set as the home.
 
 - Does not handle upload of dashboards more deeply nested than Grafana supports.
+
+- Does not support multi-organization deployments
