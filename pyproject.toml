@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "grafana_cli"
+name = "grafana_dashboard_manager"
 version = "0.1.0"
 description = ""
 authors = ["Vince Chan <vince@beamconnectivity.com>"]
@@ -20,4 +20,4 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-grafana-cli = "grafana_cli.__main__:app"
+grafana-dashboard-manager = "grafana_dashboard_manager.__main__:app"

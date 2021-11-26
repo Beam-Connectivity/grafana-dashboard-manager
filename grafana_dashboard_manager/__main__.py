@@ -8,7 +8,7 @@ https://opensource.org/licenses/MIT.
 
 This cli interface can be called with
 (poetry install)
-poetry run grafana-cli --help
+poetry run grafana-dashboard-manager --help
 """
 
 import logging
@@ -16,26 +16,26 @@ import logging
 import typer
 from rich.logging import RichHandler
 
-import grafana_cli.dashboard
-import grafana_cli.dashboard_download
-import grafana_cli.dashboard_upload
-import grafana_cli.folder
+import grafana_dashboard_manager.dashboard
+import grafana_dashboard_manager.dashboard_download
+import grafana_dashboard_manager.dashboard_upload
+import grafana_dashboard_manager.folder
 
 from .api import RestApiBasicAuth, grafana
 
 logging.basicConfig(level="INFO", format="%(message)s", datefmt="[%X]", handlers=[RichHandler()])
 
 app = typer.Typer(add_completion=False)
-app.add_typer(grafana_cli.dashboard.app, name="dashboard", help="Inspect and manage dashboards")
-app.add_typer(grafana_cli.folder.app, name="folder", help="Inspect and manage folders")
+app.add_typer(grafana_dashboard_manager.dashboard.app, name="dashboard", help="Inspect and manage dashboards")
+app.add_typer(grafana_dashboard_manager.folder.app, name="folder", help="Inspect and manage folders")
 
 app.add_typer(
-    grafana_cli.dashboard_download.app,
+    grafana_dashboard_manager.dashboard_download.app,
     name="download",
     help="Retrieve current dashboards from webapp and save to json files",
 )
 app.add_typer(
-    grafana_cli.dashboard_upload.app,
+    grafana_dashboard_manager.dashboard_upload.app,
     name="upload",
     help="Inserts (and overwrites) dashboard definitions from json files to webapp",
 )

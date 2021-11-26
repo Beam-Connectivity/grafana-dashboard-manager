@@ -88,7 +88,7 @@ def create_update_dashboard(dashboard_file: Path, folder_uid: str):
     """
 
     # Common options
-    request = {"overwrite": True, "message": f"Updated using grafana-cli version #{SHA[:7]}"}
+    request = {"overwrite": True, "message": f"Updated using grafana-dashboard-manager version #{SHA[:7]}"}
 
     # Catch the special General case where you put dashboards inside by not specifying any destination folder id or uid
     if folder_uid != "general":

@@ -1,4 +1,4 @@
-# grafana-cli
+# grafana-dashboard-manager
 
 A simple cli utility for importing or exporting dashboard json definitions using the Grafana HTTP API.
 
@@ -19,7 +19,7 @@ The intended development process is:
 
 1. Develop existing dashboard, or create a new one and save it in the web UI.
 2. Ensure the dashboard is in the desired folder.
-3. Use `grafana-cli` to extract the new dashboards and save them to a local directory.
+3. Use `grafana-dashboard-manager` to extract the new dashboards and save them to a local directory.
 4. Dashboards can be created/updated from the local directory back into Grafana.
 
 # Usage
@@ -29,18 +29,18 @@ The intended development process is:
 Dependencies are managed with poetry.
 
 ```bash
-$ cd /path/to/grafana-cli
+$ cd /path/to/grafana-dashboard-manager
 $ poetry install
 ```
 
 Note that the admin login user and password are required, and its selected organization is correct.
 
-See the full help text with `poetry run grafana-cli --help`
+See the full help text with `poetry run grafana-dashboard-manager --help`
 
 ### Download dashboards from web to solution-data
 
 ```bash
-poetry run grafana-cli \
+poetry run grafana-dashboard-manager \
     --host https://my.grafana.com \
     --username admin --password mypassword \
     download all \
@@ -50,7 +50,7 @@ poetry run grafana-cli \
 ### Upload dashboards from solution-data to web
 
 ```bash
-poetry run grafana-cli \
+poetry run grafana-dashboard-manager \
     --host https://my.grafana.com \
     --username admin --password mypassword \
     upload all \
