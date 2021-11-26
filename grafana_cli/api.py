@@ -61,8 +61,8 @@ class RestApiBasicAuth:
     def _check_response(status, response) -> Dict:
         """Gives just the response body if response is ok, otherwise fail hard"""
         if status != 200:
-            logger.error(f"{status}: {response}")
-            sys.exit(1)
+            raise requests.HTTPError(f"{status}: {response}")
+
         return response
 
 
