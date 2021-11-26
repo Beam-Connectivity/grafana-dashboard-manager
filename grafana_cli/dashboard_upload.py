@@ -17,6 +17,7 @@ import git
 import rich
 import typer
 from rich.tree import Tree
+from requests import HTTPError
 
 from .api import grafana
 from .dashboard import update_dashlist_folder_ids
@@ -112,18 +113,23 @@ def create_update_dashboard(dashboard_file: Path, folder_uid: str):
 @app.command()
 def set_home_dashboard():
     """
-    The API is broken and homeDashboardId doesn't do anything. Leaving this here in case they fix this
+    Attempt to set a dashboard with uid 'home' as the default Home dashboard.
+    The /org/preferences API seems broken on v8.2.3, and setting homeDashboardId doesn't seem to take effect.
+    Leaving this here in case they fix this
     """
     logger.info("Setting home dashboard..")
-    response = grafana.api.get("dashboards/uid/home")
-    logger.info(response)
-    home_id = response["dashboard"]["id"]
+    try:
+        response = grafana.api.get("dashboards/uid/home")
+        home_id = response["dashboard"]["id"]
+    except HTTPError:
+        logger.debug(f"Did not find a dashboard with uid 'home' to set as default home dashboard")
+        return
 
-    # In the UI, only starred dashboards show up as able to set as home, which isn't actually required in theory if
+    # In the UI, only starred dashboards show up as able to set as home, which isn't actually required in theory, if
     # done through the API. But since the API doesn't work, star it to make the manual step a bit easier.
     if not response["meta"].get("isStarred", False):
         logger.info(grafana.api.post(f"user/stars/dashboard/{home_id}", {}))
 
-    # body =  {'theme': '', 'homeDashboardId': home_id, 'timezone': ''}
-    # logger.debug(body)
+    # Seems homeDashboardId doesn't work. Interestingly theme and timezone does...
+    # body =  {'theme': 'dark', 'homeDashboardId': home_id, 'timezone': 'utc'}
     # grafana.api.put("org/preferences", body)
