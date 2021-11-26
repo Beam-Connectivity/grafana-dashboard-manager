@@ -44,7 +44,7 @@ poetry run grafana-dashboard-manager \
     --host https://my.grafana.com \
     --username admin --password mypassword \
     download all \
-    --destination-dir /path/to/$customer-solution-data/analytics/dashboards
+    --destination-dir /path/to/dashboards/
 ```
 
 ### Upload dashboards from solution-data to web
@@ -54,7 +54,7 @@ poetry run grafana-dashboard-manager \
     --host https://my.grafana.com \
     --username admin --password mypassword \
     upload all \
-    --source-dir /path/to/$customer-solution-data/analytics/dashboards
+    --source-dir /path/to/dashboards/
 ```
 
 N.B. if your Grafana is not at port 80/443 as indicated by the protocol prefix, the port needs to be specified as part of the `--host` argument, e.g. for a locally hosted instance on port 3000: `--host http://localhost:3000`
