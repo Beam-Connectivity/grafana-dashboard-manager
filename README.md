@@ -1,5 +1,8 @@
 # grafana-dashboard-manager
 
+![CodeQL](https://github.com/Beam-Connectivity/grafana-dashboard-manager/actions/workflows/codeql-analysis.yml/badge.svg)
+
+
 A simple cli utility for importing or exporting dashboard json definitions using the Grafana HTTP API.
 
 This may be useful for:
