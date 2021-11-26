@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "grafana_cli"
+version = "0.1.0"
+description = ""
+authors = ["Vince Chan <vince@beamconnectivity.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+typer = "^0.4.0"
+requests = "^2.26.0"
+rich = "^10.14.0"
+GitPython = "^3.1.24"
+pylint = "^2.12.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+grafana-cli = "grafana_cli.__main__:app"
