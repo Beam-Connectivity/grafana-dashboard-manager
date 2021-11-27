@@ -6,6 +6,7 @@ authors = ["Vince Chan <vince@beamconnectivity.com>"]
 license = "MIT"
 readme = "README.md"
 homepage = "https://www.beamconnectivity.com"
+repository = "https://github.com/Beam-Connectivity/grafana-dashboard-manager"
 keywords = [
     "grafana",
     "dashboard",
