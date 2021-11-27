@@ -31,6 +31,14 @@ The intended development process is:
 
 Dependencies are managed with poetry.
 
+Install from pypi:
+
+```bash
+$ poetry run pip install grafana-dashboard-manager
+```
+
+Install from source
+
 ```bash
 $ cd /path/to/grafana-dashboard-manager
 $ poetry install

@@ -1,8 +1,16 @@
 [tool.poetry]
 name = "grafana_dashboard_manager"
-version = "0.1.0"
-description = ""
+version = "0.1.1"
+description = "A cli utility that uses Grafana's HTTP API to easily save and restore dashboards."
 authors = ["Vince Chan <vince@beamconnectivity.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://www.beamconnectivity.com"
+keywords = [
+    "grafana",
+    "dashboard",
+    "json"
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -10,10 +18,10 @@ typer = "^0.4.0"
 requests = "^2.26.0"
 rich = "^10.14.0"
 GitPython = "^3.1.24"
-pylint = "^2.12.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+pylint = "^2.12.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
