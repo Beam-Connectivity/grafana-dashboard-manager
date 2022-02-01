@@ -34,10 +34,10 @@ Dependencies are managed with poetry.
 Install from pypi:
 
 ```bash
-$ poetry run pip install grafana-dashboard-manager
+$ pip install grafana-dashboard-manager
 ```
 
-Install from source
+Install from source (requires [poetry](https://python-poetry.org/) on your system)
 
 ```bash
 $ cd /path/to/grafana-dashboard-manager
