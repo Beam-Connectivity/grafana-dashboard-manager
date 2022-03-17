@@ -91,5 +91,5 @@ def _write_dashboards_to_local_folder_from_grafana_folder(folder: Dict, destinat
             dashboard_file.parent.mkdir(parents=True, exist_ok=True)
             dashboard_file.write_text(json.dumps(dashboard_definition["dashboard"], indent=2))
             logger.info(f"Successfully saved {dashboard['title']} dashboard to {dashboard_file}")
-        except:
-            logger.info(f"❌ An exception occurred with {dashboard['title']}")
+        except Exception:
+            logger.exception(f"❌ An exception occurred with {dashboard['title']}")
