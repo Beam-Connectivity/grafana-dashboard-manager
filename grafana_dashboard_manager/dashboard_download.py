@@ -62,7 +62,6 @@ def all(
 
     logger.info("✅")
 
-
 # =============
 
 
@@ -79,16 +78,18 @@ def _write_dashboards_to_local_folder_from_grafana_folder(folder: Dict, destinat
     for dashboard in grafana.api.get(f"search?folderIds={folder_id}&type=dash-db"):
         logger.info(f"Found {dashboard['title']} dashboard in folder {folder['title']}")
 
-        # Retrieve JSON definition
-        dashboard_definition = grafana.api.get(f"dashboards/uid/{dashboard['uid']}")
+        try:
+            dashboard_definition = grafana.api.get(f"dashboards/uid/{dashboard['uid']}")
 
-        # Update references in dashboard pickers to folder ids, as they are auto generated
-        dashboard_definition = update_dashlist_folder_ids(dashboard_definition)
+            # Update references in dashboard pickers to folder ids, as they are auto generated
+            dashboard_definition = update_dashlist_folder_ids(dashboard_definition)
 
-        # Write it to file
-        dashboard_file: Path = (
-            destination_dir / folder["title"] / f"{dashboard['title'].lower().replace(' ', '_')}.json"
-        )
-        dashboard_file.parent.mkdir(parents=True, exist_ok=True)
-        dashboard_file.write_text(json.dumps(dashboard_definition["dashboard"], indent=2))
-        logger.info(f"Successfully saved {dashboard['title']} dashboard to {dashboard_file}")
+            # Write it to file
+            dashboard_file: Path = (
+                    destination_dir / folder["title"] / f"{dashboard['title'].lower().replace(' ', '_')}.json"
+                    )
+            dashboard_file.parent.mkdir(parents=True, exist_ok=True)
+            dashboard_file.write_text(json.dumps(dashboard_definition["dashboard"], indent=2))
+            logger.info(f"Successfully saved {dashboard['title']} dashboard to {dashboard_file}")
+        except Exception:
+            logger.exception(f"❌ An exception occurred with {dashboard['title']}")
