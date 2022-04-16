@@ -51,7 +51,7 @@ def all(
     )
     rich.print(walk_directory(source_dir, tree))
 
-    for folder in source_dir.glob("*"):
+    for folder in Path(source_dir).glob("*"):
         if folder.is_dir():
             for dashboard_file in folder.glob("*.json"):
                 if folder.name == "General":
@@ -121,7 +121,7 @@ def set_home_dashboard():
         response = grafana.api.get("dashboards/uid/home")
         home_id = response["dashboard"]["id"]
     except HTTPError:
-        logger.debug(f"Did not find a dashboard with uid 'home' to set as default home dashboard")
+        logger.debug("Did not find a dashboard with uid 'home' to set as default home dashboard")
         return
 
     # In the UI, only starred dashboards show up as able to set as home, which isn't actually required in theory, if
