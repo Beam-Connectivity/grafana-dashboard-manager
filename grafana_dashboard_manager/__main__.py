@@ -55,7 +55,7 @@ def main(
     grafana.host = host
     grafana.username = username
     grafana.password = password
-    grafana.selfSignedCert = password
+    grafana.selfSignedCert = selfSignedCert
     grafana.api = RestApiBasicAuth(grafana.host,
                                    grafana.username,
                                    grafana.password,
