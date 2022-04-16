@@ -46,6 +46,7 @@ def main(
     host: str = typer.Option(..., help="Grafana host including 'http(s)://'"),
     username: str = typer.Option("admin", help="Grafana admin login username"),
     password: str = typer.Option(..., help="Grafana admin login password"),
+    selfSignedCert: bool = typer.Option(False, help="Using self signed certificate"),
     verbose: bool = typer.Option(False, help="Output debug level logging"),
 ):
     """
@@ -54,7 +55,11 @@ def main(
     grafana.host = host
     grafana.username = username
     grafana.password = password
-    grafana.api = RestApiBasicAuth(grafana.host, grafana.username, grafana.password)
+    grafana.selfSignedCert = password
+    grafana.api = RestApiBasicAuth(grafana.host,
+                                   grafana.username,
+                                   grafana.password,
+                                   grafana.selfSignedCert)
 
     if verbose:
         logging.getLogger().setLevel("DEBUG")
