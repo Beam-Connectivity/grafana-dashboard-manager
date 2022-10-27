@@ -45,16 +45,16 @@ app.add_typer(
 def main(
     host: str = typer.Option(..., help="Grafana host including 'http(s)://'"),
     username: str = typer.Option("admin", help="Grafana admin login username"),
-    password: str = typer.Option(..., help="Grafana admin login password"),
+    password: str = typer.Option(None, help="Grafana admin login password"),
+    token: str = typer.Option(None, help="Grafana API token with admin privileges"),
     verbose: bool = typer.Option(False, help="Output debug level logging"),
 ):
     """
     Manage Beam deployed Grafana instances.
     """
     grafana.host = host
-    grafana.username = username
-    grafana.password = password
-    grafana.api = RestApiBasicAuth(grafana.host, grafana.username, grafana.password)
+    grafana.credentials = token if token else (username, password)
+    grafana.api = RestApiBasicAuth(grafana.host, grafana.credentials)
 
     if verbose:
         logging.getLogger().setLevel("DEBUG")
