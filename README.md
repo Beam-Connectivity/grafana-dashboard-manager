@@ -29,13 +29,13 @@ The intended workflow is:
 
 ### Install via _[pip](https://pypi.org/project/pip/)_:
 
-```bash
+```shell
 pip install grafana-dashboard-manager
 ```
 
 ### Install from source - requires _[Poetry](https://python-poetry.org/)_ on your system:
 
-```bash
+```shell
 cd /path/to/grafana-dashboard-manager
 poetry install
 ```
@@ -50,7 +50,7 @@ For more help, see the full help text with `poetry run grafana-dashboard-manager
 
 ### Download dashboards from web to solution-data using the Grafana admin user
 
-```bash
+```shell
 poetry run grafana-dashboard-manager \
     --host https://my.grafana.com \
     --username admin_username --password admin_password \
@@ -60,7 +60,7 @@ poetry run grafana-dashboard-manager \
 
 ### Download dashboards from web to solution-data using a Grafana admin API Key
 
-```bash
+```shell
 poetry run grafana-dashboard-manager \
     --host https://my.grafana.com \
     --token admin_api_key \
@@ -70,7 +70,7 @@ poetry run grafana-dashboard-manager \
 
 ### Upload dashboards from solution-data to web using the Grafana admin user
 
-```bash
+```shell
 poetry run grafana-dashboard-manager \
     --host https://my.grafana.com \
     --username admin_username --password admin_password \
@@ -80,7 +80,7 @@ poetry run grafana-dashboard-manager \
 
 ### Upload dashboards from solution-data to web using a Grafana admin API Key
 
-```bash
+```shell
 poetry run grafana-dashboard-manager \
     --host https://my.grafana.com \
     --token admin_api_key \
