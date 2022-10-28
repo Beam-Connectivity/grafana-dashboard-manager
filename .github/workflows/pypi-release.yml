@@ -26,7 +26,7 @@ jobs:
         run: poetry install --no-interaction --no-root
       - name: Build & Publish
         run: |
-          poetry version patch
+          poetry version $(poetry version --short)-${GITHUB_RUN_ID}.${GITHUB_RUN_ATTEMPT}
           poetry publish --build
         env:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
