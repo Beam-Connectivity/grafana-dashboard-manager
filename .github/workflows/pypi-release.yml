@@ -5,7 +5,7 @@ jobs:
   deploy:
     environment: PyPI
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     name: Publish to PyPI with Poetry
     steps:
       - uses: actions/checkout@v2
