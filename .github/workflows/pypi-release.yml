@@ -1,0 +1,33 @@
+name: Publish Package
+run-name: Release to PyPI
+on: [push]
+jobs:
+  deploy:
+    environment: PyPI
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    name: Publish to PyPI with Poetry
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - uses: actions/cache@v2
+        name: Cache setup
+        with:
+          path: ~/.local
+          key: poetry-1.2.2-0
+      - uses: snok/install-poetry@v1
+        with:
+          version: 1.2.2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      - name: Install
+        run: poetry install --no-interaction --no-root
+      - name: Build
+        run: poetry build
+      - name: Publish
+        run: poetry publish
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
+
