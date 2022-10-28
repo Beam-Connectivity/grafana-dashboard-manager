@@ -24,12 +24,10 @@ jobs:
           virtualenvs-in-project: true
       - name: Install
         run: poetry install --no-interaction --no-root
-      - name: Build
-        run: poetry build
-      - name: Publish
+      - name: Build & Publish
         run: |
           poetry version patch
-          poetry publish
+          poetry publish --build
         env:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.POETRY_PYPI_TOKEN_PYPI }}
 
