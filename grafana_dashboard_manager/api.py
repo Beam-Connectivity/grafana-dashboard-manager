@@ -14,6 +14,7 @@ import logging
 from dataclasses import dataclass
 from typing import Dict
 
+import sys
 import requests
 import six
 
@@ -42,7 +43,7 @@ class RestApiBasicAuth:
     HTTP REST calls with status code checking and common auth/headers
     """
 
-    def __init__(self, host: str = "", credentials = None) -> None:
+    def __init__(self, host: str = "", credentials=None) -> None:
         self.host = host
         self.session = requests.Session()
         self.session.headers = {
@@ -87,7 +88,9 @@ class RestApiBasicAuth:
     def _check_response(status, response) -> Dict:
         """Gives just the response body if response is ok, otherwise fail hard"""
         if status != 200:
-            raise requests.HTTPError(f"{status}: {response}")
+            message = response["message"]
+            print(f"Request failed - 'HTTP error {status}: {message}'", file=sys.stderr)
+            quit(1)
 
         return response
 

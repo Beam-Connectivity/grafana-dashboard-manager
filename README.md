@@ -2,80 +2,97 @@
 
 ![CodeQL](https://github.com/Beam-Connectivity/grafana-dashboard-manager/actions/workflows/codeql-analysis.yml/badge.svg)
 
+## Introduction
 
-A simple cli utility for importing or exporting dashboard json definitions using the Grafana HTTP API.
+A simple CLI utility for importing or exporting dashboard JSON definitions using the Grafana HTTP API.
 
-This may be useful for:
+This can be used for:
 
-- Backing up your dashboards that already exist within your Grafana instance, e.g. if you are migrating from the internal sqlite database to MySQL.
-- Updating dashboard files for your Infrastructure-as-Code, for use with Grafana dashboard provisioning.
+- Backing up your dashboards that already exist within your Grafana instance, e.g. if you are migrating from the internal SQLite database to MySQL.
+- Updating dashboard files for your Infrastructure-as-Code for use with [Grafana dashboard provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards).
 - Making tweaks to dashboard JSON files directly and updating Grafana with one command.
 
-Notable features:
+### Features
 
 - Mirrors the folder structure between a local set of dashboards and Grafana, creating folders where necessary.
-- Ensures links to dashboards folders in a `dashlist` Panel are consistent with the Folder IDs - useful for deploying one set of dashboards across mulitple Grafana instances, e.g. for dev, test, prod environments.
+- Ensures links to dashboards folders in a `dashlist` Panel are consistent with the Folder IDs - useful for deploying one set of dashboards across multiple Grafana instances, for instance across environments.
 
 ### Workflow
 
-The intended development process is:
+The intended workflow is:
 
-1. Develop existing dashboard, or create a new one and save it in the web UI.
-2. Ensure the dashboard is in the desired folder.
-3. Use `grafana-dashboard-manager` to extract the new dashboards and save them to a local directory.
-4. Dashboards can be created/updated from the local directory back into Grafana.
+1. Create a dashboard and save it in the desired folder from within the Grafana web GUI
+2. Use `grafana-dashboard-manager` to extract the new dashboards and save them to a local directory or version control system.
+3. Dashboards can be created or updated from the local store and uploaded back into Grafana.
 
-# Usage
+## Installation
 
-#### Installation
+### Install via _[pip](https://pypi.org/project/pip/)_:
 
-Dependencies are managed with poetry.
-
-Install from pypi:
-
-```bash
-$ pip install grafana-dashboard-manager
+```shell
+pip install grafana-dashboard-manager
 ```
 
-Install from source (requires [poetry](https://python-poetry.org/) on your system)
+### Install from source - requires _[Poetry](https://python-poetry.org/)_ on your system:
 
-```bash
-$ cd /path/to/grafana-dashboard-manager
-$ poetry install
+```shell
+cd /path/to/grafana-dashboard-manager
+poetry install
 ```
 
-Note that the admin login user and password are required, and its selected organization is correct.
+## Usage
 
-See the full help text with `poetry run grafana-dashboard-manager --help`
+### Credentials
 
-### Download dashboards from web to solution-data
+It is important to note that the **admin** login username and password are required, and its selected organization must be correct, if you are accessing the API using `--username` and `--password`. Alternatively, the API Key must have **admin** permissions if you are accessing the API using `--token`.
 
-```bash
+For more help, see the full help text with `poetry run grafana-dashboard-manager --help`.
+
+### Download dashboards from web to solution-data using the Grafana admin user
+
+```shell
 poetry run grafana-dashboard-manager \
     --host https://my.grafana.com \
-    --username admin --password mypassword \
+    --username admin_username --password admin_password \
     download all \
     --destination-dir /path/to/dashboards/
 ```
 
-### Upload dashboards from solution-data to web
+### Download dashboards from web to solution-data using a Grafana admin API Key
 
-```bash
+```shell
 poetry run grafana-dashboard-manager \
     --host https://my.grafana.com \
-    --username admin --password mypassword \
+    --token admin_api_key \
+    download all \
+    --destination-dir /path/to/dashboards/
+```
+
+### Upload dashboards from solution-data to web using the Grafana admin user
+
+```shell
+poetry run grafana-dashboard-manager \
+    --host https://my.grafana.com \
+    --username admin_username --password admin_password \
     upload all \
     --source-dir /path/to/dashboards/
 ```
 
-N.B. if your Grafana is not at port 80/443 as indicated by the protocol prefix, the port needs to be specified as part of the `--host` argument, e.g. for a locally hosted instance on port 3000: `--host http://localhost:3000`
+### Upload dashboards from solution-data to web using a Grafana admin API Key
+
+```shell
+poetry run grafana-dashboard-manager \
+    --host https://my.grafana.com \
+    --token admin_api_key \
+    upload all \
+    --source-dir /path/to/dashboards/
+```
+
+**Please note:** if your Grafana is not hosted on port 80/443 as indicated by the protocol prefix, the port needs to be specified as part of the `--host` argument. For example, a locally hosted instance on port 3000: `--host http://localhost:3000`.
 
 ## Limitations
 
 - The home dashboard new deployment needs the default home dashboard to be manually set in the web UI, as the API to set the organisation default dashboard seems to be broken, at least on v8.2.3.
-
-- Currently expects a hardcoded 'home.json' dashboard to set as the home.
-
+- Currently expects a hardcoded `home.json` dashboard to set as the home.
 - Does not handle upload of dashboards more deeply nested than Grafana supports.
-
-- Does not support multi-organization deployments
+- Does not support multi-organization deployments.
