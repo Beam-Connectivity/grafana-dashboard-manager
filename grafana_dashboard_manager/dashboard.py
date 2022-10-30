@@ -54,31 +54,48 @@ def update_dashlist_folder_ids(dashboard_definition: Dict) -> Dict:
     Checks consistency between the id of folders in the database with the dashlist panel definitions,
     updating if necessary.
     """
-    # Look for panels of the 'dashlist' type
-    for panel in dashboard_definition["dashboard"]["panels"]:
-        if panel["type"] == "dashlist":
 
-            # Look up the target folder using the panel title - it needs to match!
-            folder_name = panel["title"]
-            logger.info(f"Searching for folders with name {folder_name}")
+    # Some dashboards use a list of "rows" with "panels" nested within, some dashboards just use "panels".
+    # If using "rows", we need to iterate over "rows" to extract all of the "panels"
+    if "panels" in dashboard_definition["dashboard"]:
+        for panel in dashboard_definition["dashboard"]["panels"]:
+            panel = update_single_dashlist_folder_id(panel)
+    elif "rows" in dashboard_definition["dashboard"]:
+        for row in dashboard_definition["dashboard"]["rows"]:
+            for panel in row["panels"]:
+                panel = update_single_dashlist_folder_id(panel)
+    else:
+        title = dashboard_definition["dashboard"]["title"]
+        logger.exception(f"❌ {title} does not have any any panels")
 
-            # There can only be one folder with this name
-            response = grafana.api.get(f"search?query={urllib.parse.quote(folder_name)}&type=dash-folder")
-
-            # If there's no folder, it could be referencing other things like recent dashboards, alerts etc
-            if not response:
-                continue
-
-            folder_id = response[0]["id"]
-            logger.info(f"{folder_name} folder has ID {folder_id}")
-
-            # Ensure that the folder id in the dashboard definition matches
-            if panel["options"]["folderId"] == folder_id:
-                logger.info(f"Panel folderId option already correct: {folder_id}")
-            else:
-                logger.info(f"Updating panel folderId option to {folder_id}")
-                panel["options"]["folderId"] = folder_id
     return dashboard_definition
+
+
+def update_single_dashlist_folder_id(panels_definition: Dict) -> Dict:
+    if panels_definition["type"] == "dashlist":
+        # Look up the target folder using the panel title - it needs to match!
+        folder_name = panels_definition["title"]
+        logger.info(f"Searching for folders with name {folder_name}")
+
+        # There can only be one folder with this name
+        response = grafana.api.get(
+            f"search?query={urllib.parse.quote(folder_name)}&type=dash-folder")
+
+        # If there's no folder, it could be referencing other things like recent dashboards, alerts etc
+        if not response:
+            return panels_definition
+
+        folder_id = response[0]["id"]
+        logger.info(f"{folder_name} folder has ID {folder_id}")
+
+        # Ensure that the folder id in the dashboard definition matches
+        if panels_definition["options"]["folderId"] == folder_id:
+            logger.info(
+                f"Panel folderId option already correct: {folder_id}")
+        else:
+            logger.info(f"Updating panel folderId option to {folder_id}")
+            panels_definition["options"]["folderId"] = folder_id
+    return panels_definition
 
 
 def _get_all_dashboard_uids() -> List[str]:
