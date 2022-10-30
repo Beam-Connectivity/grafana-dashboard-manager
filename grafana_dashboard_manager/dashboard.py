@@ -54,8 +54,23 @@ def update_dashlist_folder_ids(dashboard_definition: Dict) -> Dict:
     Checks consistency between the id of folders in the database with the dashlist panel definitions,
     updating if necessary.
     """
+
+    dashboard = dashboard_definition["dashboard"]
+
+    # Some dashboards use a list of "rows" with "panels" nested within, some dashboards just use "panels".
+    # If using "rows", we need to iterate over "rows" to extract all of the "panels"
+    if "panels" in dashboard:
+        panels_list = dashboard["panels"]
+    elif "rows" in dashboard:
+        rows_list = dashboard["rows"]
+        panels_list = []
+        for row in rows_list:
+            panels_list += row["panels"]
+    else:
+        logger.exception(f"❌ {dashboard['title']} does not have any any panels")
+
     # Look for panels of the 'dashlist' type
-    for panel in dashboard_definition["dashboard"]["panels"]:
+    for panel in panels_list:
         if panel["type"] == "dashlist":
 
             # Look up the target folder using the panel title - it needs to match!
