@@ -62,7 +62,7 @@ def update_dashlist_folder_ids(dashboard_definition: Dict) -> Dict:
             panel = update_single_dashlist_folder_id(panel)
     elif "rows" in dashboard_definition["dashboard"]:
         for row in dashboard_definition["dashboard"]["rows"]:
-            for panel in row:
+            for panel in row["panels"]:
                 panel = update_single_dashlist_folder_id(panel)
     else:
         title = dashboard_definition["dashboard"]["title"]
@@ -73,7 +73,6 @@ def update_dashlist_folder_ids(dashboard_definition: Dict) -> Dict:
 
 def update_single_dashlist_folder_id(panels_definition: Dict) -> Dict:
     if panels_definition["type"] == "dashlist":
-
         # Look up the target folder using the panel title - it needs to match!
         folder_name = panels_definition["title"]
         logger.info(f"Searching for folders with name {folder_name}")
