@@ -55,19 +55,17 @@ def update_dashlist_folder_ids(dashboard_definition: Dict) -> Dict:
     updating if necessary.
     """
 
-    dashboard = dashboard_definition["dashboard"]
-
     # Some dashboards use a list of "rows" with "panels" nested within, some dashboards just use "panels".
     # If using "rows", we need to iterate over "rows" to extract all of the "panels"
-    if "panels" in dashboard:
-        panels_list = dashboard["panels"]
-    elif "rows" in dashboard:
-        rows_list = dashboard["rows"]
+    if "panels" in dashboard_definition["dashboard"]:
+        panels_list = dashboard_definition["dashboard"]["panels"]
+    elif "rows" in dashboard_definition["dashboard"]:
         panels_list = []
-        for row in rows_list:
+        for row in dashboard_definition["dashboard"]["rows"]:
             panels_list += row["panels"]
     else:
-        logger.exception(f"❌ {dashboard['title']} does not have any any panels")
+        title = dashboard_definition["dashboard"]["title"]
+        logger.exception(f"❌ {title} does not have any any panels")
 
     # Look for panels of the 'dashlist' type
     for panel in panels_list:
@@ -93,6 +91,14 @@ def update_dashlist_folder_ids(dashboard_definition: Dict) -> Dict:
             else:
                 logger.info(f"Updating panel folderId option to {folder_id}")
                 panel["options"]["folderId"] = folder_id
+
+    # Reassign the panels list back to the actual 
+    if "panels" in dashboard_definition["dashboard"]:
+        dashboard_definition["dashboard"]["panels"] = panels_list
+    elif "rows" in dashboard_definition["dashboard"]:
+        for i, row in enumerate(dashboard_definition["dashboard"]["rows"]):
+            row["panels"] = panels_list[i]
+
     return dashboard_definition
 
 
