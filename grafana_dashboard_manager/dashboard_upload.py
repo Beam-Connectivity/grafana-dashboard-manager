@@ -113,8 +113,6 @@ def create_update_dashboard(dashboard_file: Path, folder_uid: str):
 def set_home_dashboard():
     """
     Attempt to set a dashboard with uid 'home' as the default Home dashboard.
-    The /org/preferences API seems broken on v8.2.3, and setting homeDashboardId doesn't seem to take effect.
-    Leaving this here in case they fix this
     """
     logger.info("Setting home dashboard..")
     try:
@@ -126,9 +124,8 @@ def set_home_dashboard():
 
     # In the UI, only starred dashboards show up as able to set as home, which isn't actually required in theory, if
     # done through the API. But since the API doesn't work, star it to make the manual step a bit easier.
-    if not response["meta"].get("isStarred", False):
-        logger.info(grafana.api.post(f"user/stars/dashboard/{home_id}", {}))
-
-    # Seems homeDashboardId doesn't work. Interestingly theme and timezone does...
-    # body =  {'theme': 'dark', 'homeDashboardId': home_id, 'timezone': 'utc'}
-    # grafana.api.put("org/preferences", body)
+    if grafana.api.isTokenAuth is False:
+        if not response["meta"].get("isStarred", False):
+            logger.info(grafana.api.post(f"user/stars/dashboard/{home_id}", {}))
+    else:
+        logger.info(grafana.api.put("org/preferences", {'homeDashboardId': home_id}))
