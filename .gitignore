@@ -137,3 +137,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 **/.DS_Store
+
+# Local files for testing the application
+/data
