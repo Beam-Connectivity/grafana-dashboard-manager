@@ -53,8 +53,10 @@ class RestApiBasicAuth:
             pass
         elif isinstance(credentials, six.string_types):
             self.session.auth = TokenAuth(credentials)
+            self.isTokenAuth  = True
         else:
             self.session.auth = requests.auth.HTTPBasicAuth(*credentials)
+            self.isTokenAuth  = False
 
     def get(self, resource: str) -> Dict:
         """HTTP GET"""
@@ -75,7 +77,7 @@ class RestApiBasicAuth:
         response = self.session.request(
             "PUT",
             f"{self.host}/api/{resource}",
-            data=body
+            json=body
         )
         return self._check_response(response.status_code, json.loads(response.text))
 
