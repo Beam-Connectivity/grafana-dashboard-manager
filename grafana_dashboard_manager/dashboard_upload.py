@@ -19,6 +19,8 @@ import typer
 from rich.tree import Tree
 from requests import HTTPError
 
+from typing import Optional
+
 from .api import grafana
 from .dashboard import update_dashlist_folder_ids
 from .tree import walk_directory
@@ -39,7 +41,8 @@ def all(
         writable=True,
         readable=True,
         resolve_path=True,
-    )
+    ),
+    skip_home: Optional[bool] = False,
 ):  # pylint: disable=redefined-builtin
     """
     Download folder-structured dashboards and write to json files at the destination_root path
@@ -61,8 +64,9 @@ def all(
 
                 create_update_dashboard(dashboard_file, folder_uid)
 
-    # Set home dashboard
-    set_home_dashboard()
+    if not skip_home:
+        # Set home dashboard
+        set_home_dashboard()
     logger.info("✅")
 
 
