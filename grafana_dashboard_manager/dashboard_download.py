@@ -83,6 +83,8 @@ def _write_dashboards_to_local_folder_from_grafana_folder(folder: Dict, destinat
 
             # Update references in dashboard pickers to folder ids, as they are auto generated
             dashboard_definition = update_dashlist_folder_ids(dashboard_definition)
+            # remove dashboard version
+            remove_version(dashboard_definition)
 
             # Write it to file
             dashboard_file: Path = (
