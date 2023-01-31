@@ -98,6 +98,14 @@ def update_single_dashlist_folder_id(panels_definition: Dict) -> Dict:
     return panels_definition
 
 
+def remove_version(dashboard_definition: Dict) -> Dict:
+    """
+    Remove version of dashboard.
+    """
+    dashboard_definition["dashboard"].pop("version")
+    return dashboard_definition
+
+
 def _get_all_dashboard_uids() -> List[str]:
     response = grafana.api.get("search?query=%")
     return [db["uid"] for db in response]
