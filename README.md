@@ -97,3 +97,5 @@ poetry run grafana-dashboard-manager \
 can be disabled with the option `skip-home`.
 - Does not handle upload of dashboards more deeply nested than Grafana supports.
 - Does not support multi-organization deployments.
+- The `version` of the dashboard is removed of the json files in order to avoid unneeded diff in git of identical dashboards with diferent versions.
+- The "/" in the title of the dashboard are now supported.
