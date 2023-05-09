@@ -89,7 +89,7 @@ def update_single_dashlist_folder_id(panels_definition: Dict) -> Dict:
         logger.info(f"{folder_name} folder has ID {folder_id}")
 
         # Ensure that the folder id in the dashboard definition matches
-        if panels_definition["options"]["folderId"] == folder_id:
+        if "folderId" in panels_definition["options"].keys() and panels_definition["options"]["folderId"] == folder_id:
             logger.info(
                 f"Panel folderId option already correct: {folder_id}")
         else:
@@ -101,3 +101,4 @@ def update_single_dashlist_folder_id(panels_definition: Dict) -> Dict:
 def _get_all_dashboard_uids() -> List[str]:
     response = grafana.api.get("search?query=%")
     return [db["uid"] for db in response]
+
