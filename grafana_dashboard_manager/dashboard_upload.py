@@ -51,7 +51,7 @@ def all(
     )
     rich.print(walk_directory(source_dir, tree))
 
-    for folder in source_dir.glob("*"):
+    for folder in Path(source_dir).glob("*"):
         if folder.is_dir():
             for dashboard_file in folder.glob("*.json"):
                 if folder.name == "General":

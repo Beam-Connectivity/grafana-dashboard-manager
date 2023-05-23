@@ -43,9 +43,10 @@ class RestApiBasicAuth:
     HTTP REST calls with status code checking and common auth/headers
     """
 
-    def __init__(self, host: str = "", credentials=None) -> None:
+    def __init__(self, host: str = "", credentials=None, selfSignedCert: bool = False) -> None:
         self.host = host
         self.session = requests.Session()
+        self.selfSignedCert = selfSignedCert
         self.session.headers = {
             "Accept": "application/json; charset=UTF-8"
         }
@@ -60,7 +61,7 @@ class RestApiBasicAuth:
 
     def get(self, resource: str) -> Dict:
         """HTTP GET"""
-        response = self.session.request("GET", f"{self.host}/api/{resource}")
+        response = self.session.request("GET", f"{self.host}/api/{resource}", verify=not self.selfSignedCert)
         return self._check_response(response.status_code, json.loads(response.text))
 
     def post(self, resource: str, body: dict) -> Dict:
@@ -68,7 +69,8 @@ class RestApiBasicAuth:
         response = self.session.request(
             "POST",
             f"{self.host}/api/{resource}",
-            json=body
+            json=body,
+            verify=not self.selfSignedCert
         )
         return self._check_response(response.status_code, json.loads(response.text))
 
@@ -77,13 +79,14 @@ class RestApiBasicAuth:
         response = self.session.request(
             "PUT",
             f"{self.host}/api/{resource}",
-            json=body
+            json=body,
+            verify=not self.selfSignedCert
         )
         return self._check_response(response.status_code, json.loads(response.text))
 
     def delete(self, resource: str) -> Dict:
         """HTTP DELETE"""
-        response = self.session.request("DELETE", f"{self.host}/api/{resource}")
+        response = self.session.request("DELETE", f"{self.host}/api/{resource}", verify=not self.selfSignedCert)
         return self._check_response(response.status_code, json.loads(response.text))
 
     @staticmethod
@@ -104,7 +107,7 @@ class GrafanaAPI:
     host: str = ""
     credentials = None
     api: RestApiBasicAuth = RestApiBasicAuth()
-
+    selfSignedCert: bool = False
 
 # Other modules import this config object to access 'global' args
 grafana = GrafanaAPI()
