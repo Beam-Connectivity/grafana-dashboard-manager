@@ -1,6 +1,7 @@
 # grafana-dashboard-manager
 
 ![CodeQL](https://github.com/Beam-Connectivity/grafana-dashboard-manager/actions/workflows/codeql-analysis.yml/badge.svg)
+[![PyPI version](https://badge.fury.io/py/grafana_dashboard_manager.svg)](https://badge.fury.io/py/grafana_dashboard_manager)
 
 A simple CLI utility for importing and exporting dashboards as JSON using the Grafana HTTP API.
 
