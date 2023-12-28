@@ -61,6 +61,14 @@ class GlobalConfig(BaseModel):
     # Internal
     home_dashboard: bool = False
 
+    @field_validator("host")
+    @classmethod
+    def strip_trailing_slash(cls, host: str) -> str:
+        """Pydantic validator to remove trailing slashes entered with the --host option"""
+        if host[-1] == "/":
+            host = host[:-1]
+        return host
+
     @field_validator("source", "destination")
     @classmethod
     def folder_exists_if_not_none(cls, path: Path | None) -> Path | None:
