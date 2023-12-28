@@ -44,6 +44,9 @@ def app():
     parent_parser.add_argument(
         "--skip-home", default=False, action=argparse.BooleanOptionalAction, help="Do not set the home dashboard"
     )
+    parent_parser.add_argument(
+        "--skip-verify", default=False, action=argparse.BooleanOptionalAction, help="Skip HTTPS server cert validation"
+    )
 
     # Add subcommands
     sub_parsers = parser.add_subparsers(title="Commands", required=True, help="Read/Write Dashboard JSONs:")
@@ -76,14 +79,15 @@ def app():
 
     # API Client
     client = GrafanaApi(
-        config.scheme,
-        config.host,
-        config.port,
-        config.username,
-        config.password,
-        config.token,
-        config.org,
-        args.verbose > 0,
+        scheme=config.scheme,
+        host=config.host,
+        port=config.port,
+        username=config.username,
+        password=config.password,
+        token=config.token,
+        org=config.org,
+        skip_verify=config.skip_verify,
+        verbose=args.verbose > 0,
     )
 
     # Run the desired command

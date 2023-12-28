@@ -32,6 +32,7 @@ class GrafanaApi:
         password: str | None = None,
         token: str | None = None,
         org: int | None = None,
+        skip_verify: bool = False,
         verbose: bool = False,
     ) -> None:
         """Wrapper object to interact with Grafana entities like Folders and Dashboards via the HTTP API"""
@@ -45,6 +46,7 @@ class GrafanaApi:
             self.CLIENT_HEADERS,
             self._init_auth(token, username, password),
             f"{self.host}/api/",
+            skip_verify,
             verbose,
         )
 

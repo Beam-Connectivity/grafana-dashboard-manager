@@ -48,6 +48,8 @@ class GlobalConfig(BaseModel):
     password: str | None = None
     token: str | None = None
     org: int | None = None
+    skip_verify: bool = False
+
     non_interactive: bool = False
     skip_home: bool = False
 

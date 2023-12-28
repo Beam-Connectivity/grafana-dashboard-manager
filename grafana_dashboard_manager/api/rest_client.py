@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class RestClient:
     """Provides RESTful calls"""
 
-    def __init__(self, headers, auth, base_url, verbose):
+    def __init__(self, headers, auth, base_url, skip_verify, verbose):
         """
         Wrapper on the httpx client to centralise request level exception handling
 
@@ -23,9 +23,10 @@ class RestClient:
             headers: common headers to apply to all requests
             auth: an httpx auth object
             base_url: url host
+            skip_verify: set to true to skip verification of https connection certs
             verbose: increased logging output
         """
-        self.client = httpx.Client(headers=headers, auth=auth, base_url=base_url)
+        self.client = httpx.Client(headers=headers, auth=auth, base_url=base_url, verify=skip_verify)
         self.verbose = verbose
 
     def get(self, resource: str) -> httpx.Response:
