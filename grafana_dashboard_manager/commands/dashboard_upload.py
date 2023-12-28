@@ -67,7 +67,10 @@ def upload_dashboards(config: GlobalConfig, client: GrafanaApi):
             dashboard = update_dashlist_folder_ids(dashboard, folder_info)
             client.dashboards.create(dashboard=dashboard, folder_uid=folder_info[folder.name].uid)
 
-    set_home_dashboard(config, client, folder_info)
+    if not config.skip_home:
+        set_home_dashboard(config, client, folder_info)
+    else:
+        logger.info("Skipped setting the home dashboard")
 
 
 def set_home_dashboard(config: GlobalConfig, client: GrafanaApi, folder_info: dict[str, Folder]):

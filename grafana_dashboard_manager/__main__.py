@@ -41,6 +41,9 @@ def app():
         action=argparse.BooleanOptionalAction,
         help="Auto-accept confirmation prompts",
     )
+    parent_parser.add_argument(
+        "--skip-home", default=False, action=argparse.BooleanOptionalAction, help="Do not set the home dashboard"
+    )
 
     # Add subcommands
     sub_parsers = parser.add_subparsers(title="Commands", required=True, help="Read/Write Dashboard JSONs:")

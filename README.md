@@ -112,6 +112,7 @@ docker run grafana-dashboard-manager \
 - The scheme is `https` and port is 443 by default. If your Grafana is not hosted with https on 443, the scheme and port needs to be specified using the `--scheme` and `--port` options respectively.
 - The `version` of the dashboard is removed of the json files in order to allow overwriting and creation of dashboards as new.
 - URL encoding of strings is handled by httpx and so characters such as `/` in folder names is supported.
+- When uploading, setting the home dashboard from the `home.json` file can be disabled with the option `--skip-home`.
 
 ## Limitations
 

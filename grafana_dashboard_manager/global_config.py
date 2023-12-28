@@ -49,6 +49,7 @@ class GlobalConfig(BaseModel):
     token: str | None = None
     org: int | None = None
     non_interactive: bool = False
+    skip_home: bool = False
 
     # Upload
     source: Path | None = None
