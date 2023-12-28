@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "grafana_dashboard_manager"
-version = "0.1.17"
+version = "0.2.0"
 description = "A cli utility that uses Grafana's HTTP API to easily save and restore dashboards."
 authors = ["Vince Chan <vince@beamconnectivity.com>"]
 license = "MIT"
