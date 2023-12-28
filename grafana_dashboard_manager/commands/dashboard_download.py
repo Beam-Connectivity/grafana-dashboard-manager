@@ -56,6 +56,8 @@ def download_dashboards(config: GlobalConfig, client: GrafanaApi):
 
     for folder_title, folder in folder_dashboards.items():
         for dashboard in folder.dashboards:
+            # Replace any slashes with dashes. When uploading, this cannot be reversed
+            folder_title = folder_title.replace("/", "-").replace("\\", "-")
             dest_file_path = destination_dir / folder_title / f"{dashboard.title}.json"
             client.dashboards.save(dashboard.uid, dest_file_path)
         logger.info(f"Saved {len(folder.dashboards)} dashboards to {destination_dir / folder_title}")
