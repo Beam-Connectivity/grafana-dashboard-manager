@@ -129,6 +129,11 @@ def update_panel_dashlist_folder_ids(panel: dict, folder_info: dict[str, Folder]
         logger.debug(f"Panel {folder_name} was not found in folders")
         return panel
 
+    # Some dashboard panels may not contain an `options` field
+    if not panel.get("options"):
+        logger.warning(f"Panel {folder_name} does not have an options field to modify")
+        return panel
+
     # Look up the target folder using the panel title - it needs to match!
     logger.info(f"Updating Panel {folder_name} with {folder.uid=} and {folder.id=}")
 
