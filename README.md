@@ -2,9 +2,7 @@
 
 ![CodeQL](https://github.com/Beam-Connectivity/grafana-dashboard-manager/actions/workflows/codeql-analysis.yml/badge.svg)
 
-## Introduction
-
-A simple CLI utility for importing or exporting dashboard JSON definitions using the Grafana HTTP API.
+A simple CLI utility for importing and exporting dashboards as JSON using the Grafana HTTP API.
 
 This can be used for:
 
@@ -12,87 +10,110 @@ This can be used for:
 - Updating dashboard files for your Infrastructure-as-Code for use with [Grafana dashboard provisioning](https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards).
 - Making tweaks to dashboard JSON files directly and updating Grafana with one command.
 
-### Features
+## Features
 
 - Mirrors the folder structure between a local set of dashboards and Grafana, creating folders where necessary.
-- Ensures links to dashboards folders in a `dashlist` Panel are consistent with the Folder IDs - useful for deploying one set of dashboards across multiple Grafana instances, for instance across environments.
-
-### Workflow
-
-The intended workflow is:
-
-1. Create a dashboard and save it in the desired folder from within the Grafana web GUI
-2. Use `grafana-dashboard-manager` to extract the new dashboards and save them to a local directory or version control system.
-3. Dashboards can be created or updated from the local store and uploaded back into Grafana.
-
-## Installation
-
-### Install via _[pip](https://pypi.org/project/pip/)_:
-
-```shell
-pip install grafana-dashboard-manager
-```
-
-### Install from source - requires _[Poetry](https://python-poetry.org/)_ on your system:
-
-```shell
-cd /path/to/grafana-dashboard-manager
-poetry install
-```
+- Ensures links to dashboards folders in a `dashlist` Panel are consistent with the Folder UIDs - useful for deploying one set of dashboards across multiple Grafana instances, for instance across environments.
 
 ## Usage
 
+> For detailed command help, see the full help text with the `--help` option.
+
 ### Credentials
 
-It is important to note that the **admin** login username and password are required, and its selected organization must be correct, if you are accessing the API using `--username` and `--password`. Alternatively, the API Key must have **admin** permissions if you are accessing the API using `--token`.
+It is important to note that the **admin** login username and password are required, and its selected organization must be correct, if you are accessing the API using `--username` and `--password`. Alternatively, a provided API Key must have **admin** permissions if you are accessing the API using `--token`.
 
-For more help, see the full help text with `poetry run grafana-dashboard-manager --help`.
+### Docker
 
-### Download dashboards from web to solution-data using the Grafana admin user
+A Dockerfile is provided. To build and run:
 
-```shell
-poetry run grafana-dashboard-manager \
-    --host https://my.grafana.com \
-    --username admin_username --password admin_password \
-    download all \
-    --destination-dir /path/to/dashboards/
+```sh
+docker build -t grafana-dashboard-manager:latest .
+docker run grafana-dashboard-manager --help
 ```
 
-### Download dashboards from web to solution-data using a Grafana admin API Key
+### From PyPI
 
-```shell
-poetry run grafana-dashboard-manager \
-    --host https://my.grafana.com \
-    --token admin_api_key \
-    download all \
-    --destination-dir /path/to/dashboards/
+Install via _[pip](https://pypi.org/project/pip/)_:
+
+```sh
+pip install grafana-dashboard-manager
 ```
 
-### Upload dashboards from solution-data to web using the Grafana admin user
+### From source
 
-```shell
-poetry run grafana-dashboard-manager \
-    --host https://my.grafana.com \
-    --username admin_username --password admin_password \
-    upload all \
-    --source-dir /path/to/dashboards/
+Install dependencies and run with _[Poetry](https://python-poetry.org/)_
+
+```sh
+cd /path/to/grafana-dashboard-manager
+poetry install
+poetry run python ./grafana_dashboard_manager --help
 ```
 
-### Upload dashboards from solution-data to web using a Grafana admin API Key
+## Workflow
 
-```shell
-poetry run grafana-dashboard-manager \
-    --host https://my.grafana.com \
-    --token admin_api_key \
-    upload all \
-    --source-dir /path/to/dashboards/
+The intended workflow is:
+
+1. Download dashboards and to a local directory or version control system for backup and change control.
+1. Replicate across multiple Grafana installs or restore a previous install by uploading the saved dashboards.
+
+## Usage Examples
+
+These examples use `docker run` commands, but the commands are the same regardless of run method.
+
+Download dashboards using the Grafana admin user:
+
+```sh
+docker run grafana-dashboard-manager \
+    download \
+    --scheme https \
+    --host my.grafana.example.com \
+    --username $USERNAME --password $PASSWORD \
+    --destination /path/to/dashboards/
 ```
 
-**Please note:** if your Grafana is not hosted on port 80/443 as indicated by the protocol prefix, the port needs to be specified as part of the `--host` argument. For example, a locally hosted instance on port 3000: `--host http://localhost:3000`.
+Download dashboards using a Grafana admin API Key:
+
+```sh
+docker run grafana-dashboard-manager \
+    download \
+    --scheme https \
+    --host my.grafana.example.com \
+    --token $API_KEY \
+    --destination /path/to/dashboards/
+```
+
+Upload dashboards using the Grafana admin user, to a local instance for testing
+
+```sh
+docker run grafana-dashboard-manager \
+    upload \
+    --scheme http \
+    --port 3000 \
+    --host localhost \
+    --username $USERNAME --password $PASSWORD \
+    --source /path/to/dashboards/
+```
+
+Upload dashboards using a Grafana admin key without any user prompts:
+
+```sh
+docker run grafana-dashboard-manager \
+    upload \
+    --scheme http \
+    --port 3000 \
+    --host localhost \
+    --token $API_KEY \
+    --source /path/to/dashboards/
+```
+
+##  Notes
+
+- The scheme is `https` and port is 443 by default. If your Grafana is not hosted with https on 443, the scheme and port needs to be specified using the `--scheme` and `--port` options respectively.
+- The `version` of the dashboard is removed of the json files in order to allow overwriting and creation of dashboards as new.
+- URL encoding of strings is handled by httpx and so characters such as `/` in folder names is supported.
 
 ## Limitations
 
-- The home dashboard new deployment needs the default home dashboard to be manually set in the web UI, as the API to set the organisation default dashboard seems to be broken, at least on v8.2.3.
-- Currently expects a hardcoded `home.json` dashboard to set as the home.
-- Does not handle upload of dashboards more deeply nested than Grafana supports.
+- Does not support the experimental nested folders in Grafana. Only one level of folders is supported.
 - Does not support multi-organization deployments.

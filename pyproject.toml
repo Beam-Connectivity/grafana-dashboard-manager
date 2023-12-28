@@ -7,22 +7,18 @@ license = "MIT"
 readme = "README.md"
 homepage = "https://www.beamconnectivity.com"
 repository = "https://github.com/Beam-Connectivity/grafana-dashboard-manager"
-keywords = [
-    "grafana",
-    "dashboard",
-    "json"
-]
+keywords = ["grafana", "dashboard", "json"]
 
 [tool.poetry.dependencies]
-python = "^3.7"
-typer = "^0.4.0"
-requests = "^2.26.0"
-rich = "^10.14.0"
-six = "^1.11.0"
+python = "^3.11"
+rich = "^13.7.0"
+httpx = "^0.25.2"
+pydantic = "^2.5.2"
+ruff = "^0.1.9"
 
-[tool.poetry.dev-dependencies]
-pytest = "^5.2"
-pylint = "^2.12.1"
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+ruff = "^0.1.6"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -30,3 +26,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 grafana-dashboard-manager = "grafana_dashboard_manager.__main__:app"
+
+[tool.ruff]
+line-length = 120
+ignore-init-module-imports = true

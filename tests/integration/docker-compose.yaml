@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: grafana-db
+      MYSQL_USER: username
+      MYSQL_PASSWORD: password
+    expose:
+      - "3306"
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      start_period: 2s
+      interval: 1s
+      timeout: 1s
+      retries: 30
+
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_DATABASE_TYPE: mysql
+      GF_DATABASE_HOST: mysql
+      GF_DATABASE_NAME: grafana-db
+      GF_DATABASE_USER: username
+      GF_DATABASE_PASSWORD: password
+    ports:
+      - "3000:3000"
