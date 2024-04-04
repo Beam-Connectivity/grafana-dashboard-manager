@@ -5,6 +5,7 @@ Use of this source code is governed by an MIT-style
 license that can be found in the LICENSE file or at
 https://opensource.org/licenses/MIT.
 """
+
 import logging
 
 import httpx
@@ -25,6 +26,7 @@ class RestClient:
             base_url: url host
             skip_verify: set to true to skip verification of https connection certs
             verbose: increased logging output
+
         """
         self.client = httpx.Client(headers=headers, auth=auth, base_url=base_url, verify=skip_verify)
         self.verbose = verbose

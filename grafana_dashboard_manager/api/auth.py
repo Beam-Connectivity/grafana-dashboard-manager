@@ -5,6 +5,7 @@ Use of this source code is governed by an MIT-style
 license that can be found in the LICENSE file or at
 https://opensource.org/licenses/MIT.
 """
+
 from base64 import b64encode
 from enum import Enum
 
@@ -43,6 +44,7 @@ class GrafanaAuth(httpx.Auth):
 
         Raises:
             ValueError: if provided args does not satisfy the requirements of auth_type
+
         """
         self.auth_type = auth_type
         self.auth_header_prefix = auth_type.value

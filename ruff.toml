@@ -1,14 +1,13 @@
 line-length = 120
-per-file-ignores = { "__init__.py" = ["F401"] }
-ignore-init-module-imports = true
-extend-select = ["E501", "F401"]
-select = [
+lint.ignore-init-module-imports = true
+lint.extend-select = ["E501", "F401"]
+lint.select = [
     "I",  # isort
     "D",  # pydocstyle
     "UP", # pyupgrade
     "B",  # flake8-bugbear
 ]
-ignore = [
+lint.ignore = [
     "D100",
     "D203",
     "D211",
