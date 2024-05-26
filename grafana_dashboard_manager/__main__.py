@@ -11,14 +11,14 @@ import argparse
 from grafana_dashboard_manager.commands import download_dashboards, upload_dashboards
 from grafana_dashboard_manager.global_config import GlobalConfig
 from grafana_dashboard_manager.grafana import GrafanaApi
-from grafana_dashboard_manager.utils import configure_logging, parse_pyproject, show_info
+from grafana_dashboard_manager.utils import configure_logging, show_info
 
 
 def app():
     """Save and update Grafana dashboards via the HTTP API"""
-    pyproject = parse_pyproject()
-
-    parser = argparse.ArgumentParser(description=pyproject["tool"]["poetry"]["description"])
+    parser = argparse.ArgumentParser(
+        description="A cli utility that uses Grafana's HTTP API to easily save and restore dashboards."
+    )
 
     # Parser for common options needed for all commands
     parent_parser = argparse.ArgumentParser(add_help=False)

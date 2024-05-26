@@ -10,7 +10,6 @@ import logging
 from pathlib import Path
 
 import rich
-import tomllib
 from rich.filesize import decimal
 from rich.logging import RichHandler
 from rich.markup import escape
@@ -38,12 +37,6 @@ def configure_logging(verbose: int):
     # In normal usage, don't log every http request
     if log_level == "INFO":
         logging.getLogger("httpx").setLevel(logging.WARNING)
-
-
-def parse_pyproject() -> dict:
-    """Returns a dict of the pyproject.toml file"""
-    with (Path(__file__) / ".." / "pyproject.toml").open() as file:
-        return tomllib.loads(file.read())
 
 
 def confirm(user_prompt: str):
