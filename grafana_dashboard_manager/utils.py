@@ -42,7 +42,7 @@ def configure_logging(verbose: int):
 
 def parse_pyproject() -> dict:
     """Returns a dict of the pyproject.toml file"""
-    with open("pyproject.toml") as file:
+    with (Path(__file__) / ".." / "pyproject.toml").open() as file:
         return tomllib.loads(file.read())
 
 
