@@ -1,6 +1,6 @@
 FROM python:3.11-slim as python-build
 
-ENV POETRY_VERSION=1.7.1 \
+ENV POETRY_VERSION=1.8.3 \
     POETRY_HOME="/opt/poetry" \
     POETRY_NO_INTERACTION=1
 
