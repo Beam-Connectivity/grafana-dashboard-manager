@@ -1,6 +1,6 @@
 FROM python:3.11-slim as python-build
 
-ENV POETRY_VERSION=1.7.1 \
+ENV POETRY_VERSION=1.8.5 \
     POETRY_HOME="/opt/poetry" \
     POETRY_NO_INTERACTION=1
 
@@ -14,7 +14,7 @@ RUN apt-get update \
 
 # install poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
-RUN poetry self add poetry-plugin-export
+RUN poetry self add poetry-plugin-export@1.7.1
 RUN poetry config warnings.export false
 
 # copy project requirement files here to ensure they will be cached.
