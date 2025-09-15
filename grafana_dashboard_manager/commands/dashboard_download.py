@@ -47,9 +47,7 @@ def download_dashboards(config: GlobalConfig, client: GrafanaApi):
     # Iterate over each folder and grab the dashboards
     for folder_title, folder in folder_dashboards.items():
         dashboards = client.folders.dashboards_in_folder(folder.id)
-        folder_dashboards[folder_title].dashboards.extend(
-            [DashboardSearchResult.model_validate(dashboard) for dashboard in dashboards]
-        )
+        folder_dashboards[folder_title].dashboards.extend(dashboards)
 
     show_dashboard_folders(folder_dashboards)
     if not config.non_interactive:

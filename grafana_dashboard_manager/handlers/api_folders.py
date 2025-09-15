@@ -33,10 +33,19 @@ class ApiFolders(BaseHandler[Folder]):
         return [Folder.model_validate(folder) for folder in body]
 
     def dashboards_in_folder(self, folder_id: int) -> list[DashboardSearchResult]:
-        """Get a list of all dashboards within a given folder"""
-        response = self.api.get(f"search?folderIds={folder_id}")
-        body = response.json()
-        return [DashboardSearchResult.model_validate(dashboard) for dashboard in body]
+        """Get all dashboards belonging to a given folder ID."""
+        # Fetch all dashboards in the org
+        response = self.api.get("search?type=dash-db")
+        all_dashboards = response.json()
+    
+        # Filter by folder_id
+        folder_dashboards = [
+            DashboardSearchResult.model_validate(d)
+            for d in all_dashboards
+            if d.get("folderId") == folder_id
+        ]
+    
+        return folder_dashboards
 
     def general_folder(self) -> Folder:
         """Get details for the default General folder"""
